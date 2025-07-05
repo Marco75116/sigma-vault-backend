@@ -8,7 +8,8 @@ import { initializeBundle } from "./utils/entities/bundle";
 
 import * as nftPositionAbi from "./abi/nftPosition";
 import * as poolManagerAbi from "./abi/poolManager";
-
+import * as eulerSwapFactoryAbi from "./abi/eulerswapfactory";
+import { handlePoolDeployed } from "./mappings/eulerswapfactory";
 import { handleTransferPosition } from "./mappings/positionManager";
 import {
   handleDonate,
@@ -104,6 +105,12 @@ processor.run(database, async (ctx) => {
             handleDonate(mctx, log);
             break;
           default:
+            break;
+        }
+      } else if (log.address === config.eulerSwapFactory) {
+        switch (log.topics[0]) {
+          case eulerSwapFactoryAbi.events.PoolDeployed.topic:
+            handlePoolDeployed(mctx, log);
             break;
         }
       }

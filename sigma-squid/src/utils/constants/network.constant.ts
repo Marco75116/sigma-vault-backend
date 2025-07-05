@@ -3,6 +3,8 @@ import { assertNotNull } from "@subsquid/util-internal";
 export type NetworkConfig = {
   nftPositionManager: string;
   nftPositionManagerFirstBlock: number;
+  eulerSwapFactory: string;
+  eulerSwapFactoryFirstBlock: number;
   poolManager: string;
   poolManagerFirstBlock: number;
   chainId: number;
@@ -38,6 +40,9 @@ export const networksConfigs: Record<string, NetworkConfig> = {
   uni: {
     nftPositionManager: "0x4529a01c7a0410167c5740c487a8de60232617bf",
     nftPositionManagerFirstBlock: 6819679,
+    eulerSwapFactory:
+      "0x45b146BC07c9985589B52df651310e75C6BE066A".toLowerCase(),
+    eulerSwapFactoryFirstBlock: 18413401,
     poolManager: "0x1f98400000000000000000000000000000000004",
     poolManagerFirstBlock: 1,
     chainId: 130,
@@ -80,6 +85,9 @@ export const networksConfigs: Record<string, NetworkConfig> = {
   eth: {
     nftPositionManager: "0xbd216513d74c8cf14cf4747e6aaa6420ff64ee9e",
     nftPositionManagerFirstBlock: 21689089,
+    eulerSwapFactory:
+      "0xb013be1D0D380C13B58e889f412895970A2Cf228".toLowerCase(),
+    eulerSwapFactoryFirstBlock: 22676162,
     poolManager: "0x000000000004444c5dc75cb358380d2e3de08a90",
     poolManagerFirstBlock: 21688329,
     chainId: 1,
@@ -126,6 +134,9 @@ export const networksConfigs: Record<string, NetworkConfig> = {
   base: {
     nftPositionManager: "0x7c5f5a4bbd8fd63184577525326123b519429bdc",
     nftPositionManagerFirstBlock: 25350993,
+    eulerSwapFactory:
+      "0x45b146BC07c9985589B52df651310e75C6BE066A".toLowerCase(),
+    eulerSwapFactoryFirstBlock: 1,
     poolManager: "0x498581ff718922c3f8e6a244956af099b2652b2b",
     poolManagerFirstBlock: 25350988,
     chainId: 8453,

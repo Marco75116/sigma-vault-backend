@@ -68,6 +68,7 @@ export const createPool = (
     timestamp: ZERO_BI,
     createdAtBlockNumber: BigInt(log.block.height),
     createdAtTimestamp: BigInt(log.block.timestamp),
+    eulerpoolflag: false,
   });
 };
 

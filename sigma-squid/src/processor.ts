@@ -11,6 +11,7 @@ import {
 } from "@subsquid/evm-processor";
 import * as poolManagerAbi from "./abi/poolManager";
 import * as nftPositionAbi from "./abi/nftPosition";
+import * as eulerSwapFactoryAbi from "./abi/eulerswapfactory";
 import { NetworkConfig } from "./utils/constants/network.constant";
 
 const fields = {
@@ -36,6 +37,13 @@ export const makeProcessor = (config: NetworkConfig) => {
       ),
     })
     .setFinalityConfirmation(75)
+    .addLog({
+      address: [config.eulerSwapFactory],
+      range: { from: config.eulerSwapFactoryFirstBlock },
+      topic0: [eulerSwapFactoryAbi.events.PoolDeployed.topic],
+      transactionLogs: true,
+      transaction: true,
+    })
     .addLog({
       address: [config.nftPositionManager],
       range: { from: config.nftPositionManagerFirstBlock },
