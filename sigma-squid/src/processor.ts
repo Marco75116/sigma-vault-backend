@@ -70,7 +70,10 @@ export const makeProcessor = (config: NetworkConfig) => {
       .addLog({
         address: [config.sigmaVault],
         range: { from: config.sigmaVaultFirstBlock },
-        topic0: [sigmaVaultAbi.events.TokensDeposited.topic],
+        topic0: [
+          sigmaVaultAbi.events.TokensDeposited.topic,
+          sigmaVaultAbi.events.TokensWithdrawn.topic,
+        ],
       })
       .setFields({
         log: {

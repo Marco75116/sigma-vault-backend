@@ -62,6 +62,10 @@ export const getDonateReccordId = (logId: String) => {
   return `${config.chainId}-${logId}`;
 };
 
-export const getSigmaVaultBalanceId = (userId: String) => {
-  return `${config.chainId}-${config.sigmaVault}-${userId}`;
+export const getSigmaVaultBalanceId = (
+  userId: String,
+  token0: String,
+  token1: String
+) => {
+  return `${config.chainId}-${config.sigmaVault}-${userId}-${token0}-${token1}`;
 };

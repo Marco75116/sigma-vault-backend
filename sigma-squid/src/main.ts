@@ -36,7 +36,10 @@ import { TokenInfo } from "./tools/tokensRetriever";
 import * as eulerSwapHookAbi from "./abi/eulerswaphook";
 import { eulerSwapHook } from "./mappings/eulerswaphook";
 import * as sigmaVaultAbi from "./abi/sigmavault";
-import { handleTokensDeposited } from "./mappings/sigmavault";
+import {
+  handleTokensDeposited,
+  handleTokensWithdrawn,
+} from "./mappings/sigmavault";
 
 export type MappingContext = ProcessorContext<StoreWithCache> & {
   queue: TaskQueue;
@@ -121,6 +124,9 @@ processor.run(database, async (ctx) => {
         switch (log.topics[0]) {
           case sigmaVaultAbi.events.TokensDeposited.topic:
             handleTokensDeposited(mctx, log);
+            break;
+          case sigmaVaultAbi.events.TokensWithdrawn.topic:
+            handleTokensWithdrawn(mctx, log);
             break;
         }
       } else {

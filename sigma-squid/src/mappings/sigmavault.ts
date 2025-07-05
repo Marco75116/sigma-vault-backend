@@ -23,11 +23,11 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
 
     let sigmaVaultBalance = await mctx.store.get(
       SigmaVaultBalance,
-      getSigmaVaultBalanceId(user)
+      getSigmaVaultBalanceId(user, token0, token1)
     );
     if (!sigmaVaultBalance) {
       sigmaVaultBalance = new SigmaVaultBalance({
-        id: getSigmaVaultBalanceId(user),
+        id: getSigmaVaultBalanceId(user, token0, token1),
         depositId: depositId,
         token0Id: getTokenId(token0),
         token1Id: getTokenId(token1),
@@ -39,6 +39,25 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
     }
     sigmaVaultBalance.amount0 += amount0;
     sigmaVaultBalance.amount1 += amount1;
+
+    await mctx.store.upsert(sigmaVaultBalance);
+  });
+};
+
+export const handleTokensWithdrawn = async (mctx: MappingContext, log: Log) => {
+  const { depositId, user, token0, amount0, token1, amount1 } =
+    sigmaVaultAbi.events.TokensWithdrawn.decode(log);
+
+  mctx.queue.add(async () => {
+    let sigmaVaultBalance = await mctx.store.get(
+      SigmaVaultBalance,
+      getSigmaVaultBalanceId(user, token0, token1)
+    );
+    if (!sigmaVaultBalance) {
+      return;
+    }
+    sigmaVaultBalance.amount0 -= amount0;
+    sigmaVaultBalance.amount1 -= amount1;
 
     await mctx.store.upsert(sigmaVaultBalance);
   });
