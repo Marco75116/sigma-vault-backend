@@ -33,6 +33,7 @@ import { updateAllPoolsTvlUSD } from "./utils/entities/pool";
 import assert from "assert";
 import { networksConfigs } from "./utils/constants/network.constant";
 import { TokenInfo } from "./tools/tokensRetriever";
+import * as eulerSwapHookAbi from "./abi/eulerswaphook";
 
 export type MappingContext = ProcessorContext<StoreWithCache> & {
   queue: TaskQueue;
@@ -111,6 +112,12 @@ processor.run(database, async (ctx) => {
         switch (log.topics[0]) {
           case eulerSwapFactoryAbi.events.PoolDeployed.topic:
             handlePoolDeployed(mctx, log);
+            break;
+        }
+      } else {
+        switch (log.topics[0]) {
+          case eulerSwapHookAbi.events.Swap.topic:
+            handleSwap(mctx, log);
             break;
         }
       }

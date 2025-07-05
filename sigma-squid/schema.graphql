@@ -427,3 +427,23 @@ type TokenHourData @entity {
 
   chainId: Int!
 }
+
+type EulerSwapHook @entity {
+  id: ID!
+
+  hookId: ID!
+  hook: Hook!
+  reserve0: BigInt!
+  reserve1: BigInt!
+  amount0In: BigInt!
+  amount1In: BigInt!
+  amount0Out: BigInt!
+  amount1Out: BigInt!
+  to: String!
+  hash: String!
+  chainId: Int!
+  # creation
+  txAtTimestamp: BigInt!
+  # block pool was created at
+  txAtBlockNumber: BigInt!
+}
