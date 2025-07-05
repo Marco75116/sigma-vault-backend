@@ -44,6 +44,7 @@ import {
   updateTokenHourData,
 } from "../utils/entities/tokenHourData";
 import { addFeeVolumePoolManager } from "../utils/entities/poolManager";
+import { ZERO_ADDRESS } from "../utils/constants/global.contant";
 
 export const handleInitialize = (mctx: MappingContext, log: Log) => {
   let {

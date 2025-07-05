@@ -1,8 +1,10 @@
 import { config, MappingContext } from "../main";
 import * as eulerSwapHookAbi from "../abi/eulerswaphook";
-import { EulerSwapHook, SwapReccord } from "../model";
+import { EulerSwapHook, Pool, SwapReccord } from "../model";
 import { getHookId, getSwapReccordId } from "../utils/helpers/ids.helper";
 import { Log } from "../processor";
+import { convertTokenToDecimal } from "../utils/helpers/global.helper";
+import { ONE_BI } from "../utils/constants/global.contant";
 
 export const eulerSwapHook = async (mctx: MappingContext, log: Log) => {
   const {
@@ -33,5 +35,36 @@ export const eulerSwapHook = async (mctx: MappingContext, log: Log) => {
       txAtBlockNumber: BigInt(log.block.height),
     });
     await mctx.store.insert(eulerSwapHook);
+
+    const pool = await mctx.store.findOne(Pool, {
+      where: {
+        hookId: getHookId(log.address),
+      },
+    });
+    if (!pool) {
+      console.log("Pool not found", log.address);
+      return;
+    }
+    pool.amount0 = reserve0;
+    pool.amount1 = reserve1;
+
+    pool.amount0D = convertTokenToDecimal(pool.amount0, pool.token0Decimals);
+    pool.amount1D = convertTokenToDecimal(pool.amount1, pool.token1Decimals);
+
+    pool.swapCount += ONE_BI;
+
+    pool.volumeToken0 += amount0In;
+    pool.volumeToken1 += amount1In;
+
+    pool.volumeToken0D = convertTokenToDecimal(
+      pool.volumeToken0,
+      pool.token0Decimals
+    );
+    pool.volumeToken1D = convertTokenToDecimal(
+      pool.volumeToken1,
+      pool.token1Decimals
+    );
+
+    await mctx.store.upsert(pool);
   });
 };
