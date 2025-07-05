@@ -124,6 +124,8 @@ type Hook @entity {
 
   ## last update timestamp
   timestamp: BigInt!
+
+  pool: Pool @derivedFrom(field: "hook")
 }
 
 type Pool @entity {
@@ -161,7 +163,7 @@ type Pool @entity {
   fee: Int!
 
   hookId: ID!
-  hook: Hook!
+  hook: Hook! @unique
 
   " sqrtPriceX96, used for calculations "
   sqrtPriceX96: BigInt!
