@@ -61,3 +61,7 @@ export const getSwapReccordId = (logId: String) => {
 export const getDonateReccordId = (logId: String) => {
   return `${config.chainId}-${logId}`;
 };
+
+export const getSigmaVaultBalanceId = (userId: String) => {
+  return `${config.chainId}-${config.sigmaVault}-${userId}`;
+};

@@ -13,6 +13,7 @@ import * as poolManagerAbi from "./abi/poolManager";
 import * as nftPositionAbi from "./abi/nftPosition";
 import * as eulerSwapFactoryAbi from "./abi/eulerswapfactory";
 import * as eulerSwapHookAbi from "./abi/eulerswaphook";
+import * as sigmaVaultAbi from "./abi/sigmavault";
 import { NetworkConfig } from "./utils/constants/network.constant";
 
 const fields = {
@@ -65,6 +66,11 @@ export const makeProcessor = (config: NetworkConfig) => {
           // poolManagerAbi.events.Donate.topic,
         ],
         transaction: true,
+      })
+      .addLog({
+        address: [config.sigmaVault],
+        range: { from: config.sigmaVaultFirstBlock },
+        topic0: [sigmaVaultAbi.events.TokensDeposited.topic],
       })
       .setFields({
         log: {

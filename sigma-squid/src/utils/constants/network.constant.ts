@@ -7,6 +7,8 @@ export type NetworkConfig = {
   eulerSwapFactoryFirstBlock: number;
   poolManager: string;
   poolManagerFirstBlock: number;
+  sigmaVault: string;
+  sigmaVaultFirstBlock: number;
   chainId: number;
   chainTag: string;
   nativeName: string;
@@ -45,6 +47,8 @@ export const networksConfigs: Record<string, NetworkConfig> = {
     eulerSwapFactoryFirstBlock: 18413401,
     poolManager: "0x1f98400000000000000000000000000000000004",
     poolManagerFirstBlock: 1,
+    sigmaVault: "0xdc5Fc954B1Ae78A9a134A21bEcC5A2477b2be848".toLowerCase(),
+    sigmaVaultFirstBlock: 20996943,
     chainId: 130,
     chainTag: "uni",
     nativeName: "Ether",
@@ -90,6 +94,8 @@ export const networksConfigs: Record<string, NetworkConfig> = {
     eulerSwapFactoryFirstBlock: 22676162,
     poolManager: "0x000000000004444c5dc75cb358380d2e3de08a90",
     poolManagerFirstBlock: 21688329,
+    sigmaVault: "0xdc5Fc954B1Ae78A9a134A21bEcC5A2477b2be848".toLowerCase(),
+    sigmaVaultFirstBlock: 20996943,
     chainId: 1,
     chainTag: "eth",
     nativeName: "Ether",
@@ -139,6 +145,8 @@ export const networksConfigs: Record<string, NetworkConfig> = {
     eulerSwapFactoryFirstBlock: 1,
     poolManager: "0x498581ff718922c3f8e6a244956af099b2652b2b",
     poolManagerFirstBlock: 25350988,
+    sigmaVault: "0xdc5Fc954B1Ae78A9a134A21bEcC5A2477b2be848".toLowerCase(),
+    sigmaVaultFirstBlock: 20996943,
     chainId: 8453,
     chainTag: "base",
     nativeName: "Ether",

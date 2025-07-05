@@ -34,6 +34,9 @@ import assert from "assert";
 import { networksConfigs } from "./utils/constants/network.constant";
 import { TokenInfo } from "./tools/tokensRetriever";
 import * as eulerSwapHookAbi from "./abi/eulerswaphook";
+import { eulerSwapHook } from "./mappings/eulerswaphook";
+import * as sigmaVaultAbi from "./abi/sigmavault";
+import { handleTokensDeposited } from "./mappings/sigmavault";
 
 export type MappingContext = ProcessorContext<StoreWithCache> & {
   queue: TaskQueue;
@@ -114,10 +117,16 @@ processor.run(database, async (ctx) => {
             handlePoolDeployed(mctx, log);
             break;
         }
+      } else if (log.address === config.sigmaVault) {
+        switch (log.topics[0]) {
+          case sigmaVaultAbi.events.TokensDeposited.topic:
+            handleTokensDeposited(mctx, log);
+            break;
+        }
       } else {
         switch (log.topics[0]) {
           case eulerSwapHookAbi.events.Swap.topic:
-            handleSwap(mctx, log);
+            eulerSwapHook(mctx, log);
             break;
         }
       }

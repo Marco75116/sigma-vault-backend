@@ -447,3 +447,19 @@ type EulerSwapHook @entity {
   # block pool was created at
   txAtBlockNumber: BigInt!
 }
+
+type SigmaVaultBalance @entity {
+  id: ID!
+
+  depositId: BigInt!
+
+  token0Id: ID!
+  token0: Token!
+  token1Id: ID!
+  token1: Token!
+  amount0: BigInt!
+  amount1: BigInt!
+  userId: ID!
+  user: Wallet!
+  chainId: Int!
+}
