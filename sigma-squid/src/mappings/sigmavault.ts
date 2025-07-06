@@ -33,7 +33,6 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
     if (!sigmaVaultBalance) {
       sigmaVaultBalance = new SigmaVaultBalance({
         id: getSigmaVaultBalanceId(user, token0, token1),
-        depositId: depositId,
         token0Id: getTokenId(token0),
         token1Id: getTokenId(token1),
         amount0: ZERO_BI,
@@ -42,6 +41,7 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
         userId: wallet.id,
       });
     }
+    sigmaVaultBalance.depositId = depositId;
     sigmaVaultBalance.amount0 += amount0;
     sigmaVaultBalance.amount1 += amount1;
 

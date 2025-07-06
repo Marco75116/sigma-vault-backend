@@ -67,5 +67,9 @@ export const getSigmaVaultBalanceId = (
   token0: String,
   token1: String
 ) => {
-  return `${config.chainId}-${config.sigmaVault}-${userId}-${token0}-${token1}`;
+  const sortedToken0 =
+    token0.toLowerCase() < token1.toLowerCase() ? token0 : token1;
+  const sortedToken1 =
+    token0.toLowerCase() < token1.toLowerCase() ? token1 : token0;
+  return `${config.chainId}-${config.sigmaVault}-${userId}-${sortedToken0}-${sortedToken1}`;
 };

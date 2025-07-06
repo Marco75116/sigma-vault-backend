@@ -235,7 +235,7 @@ export const getSigmaVaultMessageWithdraw = (
   );
 
   return `
-⬇️ <b>Sigma Vault</b> - WITHDRAW - ${chainConfig.name}
+⬆️ <b>Sigma Vault</b> - WITHDRAW - ${chainConfig.name}
 
 <b>User:</b> <code>${sigmaVault.userId.split("-")[1]}</code>
 
