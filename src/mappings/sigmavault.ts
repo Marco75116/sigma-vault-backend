@@ -92,7 +92,7 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
       amount1
     );
     console.log("TokensDeposited 1");
-    // sendMessageToSigmaVaultChannel(message);
+    sendMessageToSigmaVaultChannel(message);
   });
 };
 
@@ -141,6 +141,6 @@ export const handleTokensWithdrawn = async (mctx: MappingContext, log: Log) => {
       amount0,
       amount1
     );
-    // sendMessageToSigmaVaultChannel(message);
+    sendMessageToSigmaVaultChannel(message);
   });
 };

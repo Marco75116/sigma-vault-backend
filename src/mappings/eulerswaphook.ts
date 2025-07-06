@@ -77,6 +77,6 @@ export const eulerSwapHook = async (mctx: MappingContext, log: Log) => {
       token1,
       pool
     );
-    // sendMessageToSigmaVaultChannel(message);
+    sendMessageToSigmaVaultChannel(message);
   });
 };
