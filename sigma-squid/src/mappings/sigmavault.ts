@@ -63,7 +63,9 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
       amount0,
       amount1
     );
-    sendMessageToSigmaVaultChannel(message);
+    if (mctx.isHead) {
+      sendMessageToSigmaVaultChannel(message);
+    }
   });
 };
 
@@ -100,6 +102,8 @@ export const handleTokensWithdrawn = async (mctx: MappingContext, log: Log) => {
       amount0,
       amount1
     );
-    sendMessageToSigmaVaultChannel(message);
+    if (mctx.isHead) {
+      sendMessageToSigmaVaultChannel(message);
+    }
   });
 };

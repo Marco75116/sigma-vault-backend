@@ -11,10 +11,6 @@ deploy:
       cmd:
         - sqd
         - process:prod:eth
-    - name: base-processor
-      cmd:
-        - sqd
-        - process:prod:base
     - name: uni-processor
       cmd:
         - sqd
