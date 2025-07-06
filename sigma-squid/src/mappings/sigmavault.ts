@@ -1,7 +1,7 @@
 import { config, MappingContext } from "../main";
 import { Log } from "../processor";
 import * as sigmaVaultAbi from "../abi/sigmavault";
-import { SigmaVaultBalance, Wallet } from "../model";
+import { SigmaVaultBalance, Token, Wallet } from "../model";
 import {
   getSigmaVaultBalanceId,
   getTokenId,
@@ -9,6 +9,8 @@ import {
 } from "../utils/helpers/ids.helper";
 import { ZERO_BI } from "../utils/constants/global.contant";
 import { createWallet } from "../utils/entities/wallet";
+import { getSigmaVaultMessage } from "../utils/helpers/message.helper";
+import { sendMessageToSigmaVaultChannel } from "../utils/helpers/tgbot.helper";
 
 export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
   const { depositId, user, token0, amount0, token1, amount1 } =
@@ -41,6 +43,24 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
     sigmaVaultBalance.amount1 += amount1;
 
     await mctx.store.upsert(sigmaVaultBalance);
+
+    const token0Entity = await mctx.store.getOrFail(
+      Token,
+      sigmaVaultBalance.token0Id
+    );
+    const token1Entity = await mctx.store.getOrFail(
+      Token,
+      sigmaVaultBalance.token1Id
+    );
+    const message = getSigmaVaultMessageDeposit(
+      sigmaVaultBalance,
+      token0Entity,
+      token1Entity,
+      log,
+      amount0,
+      amount1
+    );
+    sendMessageToSigmaVaultChannel(message);
   });
 };
 
