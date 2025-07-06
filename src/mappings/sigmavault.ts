@@ -31,10 +31,15 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
       getSigmaVaultBalanceId(user, token0, token1)
     );
     if (!sigmaVaultBalance) {
+      const sortedToken0 =
+        token0.toLowerCase() < token1.toLowerCase() ? token0 : token1;
+      const sortedToken1 =
+        token0.toLowerCase() < token1.toLowerCase() ? token1 : token0;
+
       sigmaVaultBalance = new SigmaVaultBalance({
         id: getSigmaVaultBalanceId(user, token0, token1),
-        token0Id: getTokenId(token0),
-        token1Id: getTokenId(token1),
+        token0Id: getTokenId(sortedToken0),
+        token1Id: getTokenId(sortedToken1),
         amount0: ZERO_BI,
         amount1: ZERO_BI,
         chainId: config.chainId,
