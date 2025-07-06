@@ -193,3 +193,73 @@ Powered by ${sqdLink} 🦑
 Created by ${creatorLink} 👨‍💻
 `;
 };
+
+export const getSigmaVaultMessageWithdraw = (
+  sigmaVault: SigmaVaultBalance,
+  token0: Token,
+  token1: Token,
+  log: Log,
+  amount0Withdrawn: bigint,
+  amount1Withdrawn: bigint
+) => {
+  const chainConfig = chainConfigs[sigmaVault.chainId] as ChainConfig;
+
+  const poolLink = getLinkMessage(
+    `https://maglev.euler.finance/euler-swap/`,
+    "Interface"
+  );
+
+  const token0Link = getLinkMessage(
+    `${chainConfig.tokenLink}${token0.tokenAddress}`,
+    token0.symbol
+  );
+  const token1Link = getLinkMessage(
+    `${chainConfig.tokenLink}${token1.tokenAddress}`,
+    token1.symbol
+  );
+  const transactionLink = getLinkMessage(
+    `${chainConfig.txLink}${log.transactionHash}`,
+    "Transaction"
+  );
+
+  const userLink = getLinkMessage(
+    `${chainConfig.txLink}${sigmaVault.userId.split("-")[1]}`,
+    "User"
+  );
+
+  const sqdLink = getLinkMessage("https://sqd.dev", "SQD");
+
+  const creatorLink = getLinkMessage(
+    "https://t.me/marcopoloo33",
+    "Marcopoloo33"
+  );
+
+  return `
+⬇️ <b>Sigma Vault</b> - WITHDRAW - ${chainConfig.name}
+
+<b>User:</b> <code>${sigmaVault.userId.split("-")[1]}</code>
+
+<b>Current balances:</b>
+${format(
+  Number(convertTokenToDecimal(sigmaVault.amount0, token0.decimals)),
+  3
+)} ${token0.symbol} (-${format(
+    Number(convertTokenToDecimal(amount0Withdrawn, token0.decimals)),
+    3
+  )} ${token0.symbol})
+
+${format(
+  Number(convertTokenToDecimal(sigmaVault.amount1, token1.decimals)),
+  3
+)} ${token1.symbol} (-${format(
+    Number(convertTokenToDecimal(amount1Withdrawn, token1.decimals)),
+    3
+  )} ${token1.symbol})
+
+⚡ <b>Euler Maglev</b>: ${poolLink}
+↗️ <b>Scanner:</b> ${token0Link} | ${token1Link} | ${transactionLink} | ${userLink}
+
+Powered by ${sqdLink} 🦑
+Created by ${creatorLink} 👨‍💻
+`;
+};

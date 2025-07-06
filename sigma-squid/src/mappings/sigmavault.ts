@@ -9,7 +9,10 @@ import {
 } from "../utils/helpers/ids.helper";
 import { ZERO_BI } from "../utils/constants/global.contant";
 import { createWallet } from "../utils/entities/wallet";
-import { getSigmaVaultMessage } from "../utils/helpers/message.helper";
+import {
+  getSigmaVaultMessageDeposit,
+  getSigmaVaultMessageWithdraw,
+} from "../utils/helpers/message.helper";
 import { sendMessageToSigmaVaultChannel } from "../utils/helpers/tgbot.helper";
 
 export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
@@ -80,5 +83,23 @@ export const handleTokensWithdrawn = async (mctx: MappingContext, log: Log) => {
     sigmaVaultBalance.amount1 -= amount1;
 
     await mctx.store.upsert(sigmaVaultBalance);
+
+    const token0Entity = await mctx.store.getOrFail(
+      Token,
+      sigmaVaultBalance.token0Id
+    );
+    const token1Entity = await mctx.store.getOrFail(
+      Token,
+      sigmaVaultBalance.token1Id
+    );
+    const message = getSigmaVaultMessageWithdraw(
+      sigmaVaultBalance,
+      token0Entity,
+      token1Entity,
+      log,
+      amount0,
+      amount1
+    );
+    sendMessageToSigmaVaultChannel(message);
   });
 };
