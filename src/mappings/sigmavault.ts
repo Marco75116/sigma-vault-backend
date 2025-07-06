@@ -31,6 +31,7 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
       SigmaVaultBalance,
       getSigmaVaultBalanceId(user, token0, token1)
     );
+    console.log("TokensDeposited 0.1");
     if (!sigmaVaultBalance) {
       const sortedToken0 =
         token0.toLowerCase() < token1.toLowerCase() ? token0 : token1;
@@ -53,14 +54,20 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
 
     await mctx.store.upsert(sigmaVaultBalance);
 
+    console.log("TokensDeposited 0.2");
+
     const token0Entity = await mctx.store.getOrFail(
       Token,
       sigmaVaultBalance.token0Id
     );
+    console.log("TokensDeposited 1");
+
     const token1Entity = await mctx.store.getOrFail(
       Token,
       sigmaVaultBalance.token1Id
     );
+    console.log("TokensDeposited 2");
+
     const message = getSigmaVaultMessageDeposit(
       sigmaVaultBalance,
       token0Entity,
@@ -69,10 +76,8 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
       amount0,
       amount1
     );
-    if (mctx.isHead) {
-      console.log("TokensDeposited 1");
-      sendMessageToSigmaVaultChannel(message);
-    }
+    console.log("TokensDeposited 1");
+    sendMessageToSigmaVaultChannel(message);
   });
 };
 
@@ -109,8 +114,6 @@ export const handleTokensWithdrawn = async (mctx: MappingContext, log: Log) => {
       amount0,
       amount1
     );
-    if (mctx.isHead) {
-      sendMessageToSigmaVaultChannel(message);
-    }
+    sendMessageToSigmaVaultChannel(message);
   });
 };
