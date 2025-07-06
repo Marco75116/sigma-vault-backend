@@ -2,6 +2,7 @@ import { format, toFormattedPercentage } from "./tgbot.helper";
 import { ChainConfig, chainConfigs } from "../constants/tgbot.constant";
 import { EulerSwapHook, Pool, SigmaVaultBalance, Token } from "../../model";
 import { convertTokenToDecimal } from "./global.helper";
+import { getTokenId } from "./ids.helper";
 import { Log } from "../../processor";
 
 export const getLinkMessage = (link: string, text: string) => {
@@ -134,6 +135,15 @@ export const getSigmaVaultMessageDeposit = (
 ) => {
   const chainConfig = chainConfigs[sigmaVault.chainId] as ChainConfig;
 
+  // Determine if tokens were swapped during sorting for the balance
+  const tokensSwapped =
+    sigmaVault.token0Id.toLowerCase() !==
+    getTokenId(token0.tokenAddress).toLowerCase();
+
+  // Map amounts based on whether tokens were swapped
+  const amount0ForToken0 = tokensSwapped ? amount1Added : amount0Added;
+  const amount1ForToken1 = tokensSwapped ? amount0Added : amount1Added;
+
   const poolLink = getLinkMessage(
     `https://maglev.euler.finance/euler-swap/`,
     "Interface"
@@ -174,7 +184,7 @@ ${format(
   Number(convertTokenToDecimal(sigmaVault.amount0, token0.decimals)),
   3
 )} ${token0.symbol} (+${format(
-    Number(convertTokenToDecimal(amount0Added, token0.decimals)),
+    Number(convertTokenToDecimal(amount0ForToken0, token0.decimals)),
     3
   )} ${token0.symbol})
 
@@ -182,7 +192,7 @@ ${format(
   Number(convertTokenToDecimal(sigmaVault.amount1, token1.decimals)),
   3
 )} ${token1.symbol} (+${format(
-    Number(convertTokenToDecimal(amount1Added, token1.decimals)),
+    Number(convertTokenToDecimal(amount1ForToken1, token1.decimals)),
     3
   )} ${token1.symbol})
 
@@ -203,6 +213,15 @@ export const getSigmaVaultMessageWithdraw = (
   amount1Withdrawn: bigint
 ) => {
   const chainConfig = chainConfigs[sigmaVault.chainId] as ChainConfig;
+
+  // Determine if tokens were swapped during sorting for the balance
+  const tokensSwapped =
+    sigmaVault.token0Id.toLowerCase() !==
+    getTokenId(token0.tokenAddress).toLowerCase();
+
+  // Map amounts based on whether tokens were swapped
+  const amount0ForToken0 = tokensSwapped ? amount1Withdrawn : amount0Withdrawn;
+  const amount1ForToken1 = tokensSwapped ? amount0Withdrawn : amount1Withdrawn;
 
   const poolLink = getLinkMessage(
     `https://maglev.euler.finance/euler-swap/`,
@@ -244,7 +263,7 @@ ${format(
   Number(convertTokenToDecimal(sigmaVault.amount0, token0.decimals)),
   3
 )} ${token0.symbol} (-${format(
-    Number(convertTokenToDecimal(amount0Withdrawn, token0.decimals)),
+    Number(convertTokenToDecimal(amount0ForToken0, token0.decimals)),
     3
   )} ${token0.symbol})
 
@@ -252,7 +271,7 @@ ${format(
   Number(convertTokenToDecimal(sigmaVault.amount1, token1.decimals)),
   3
 )} ${token1.symbol} (-${format(
-    Number(convertTokenToDecimal(amount1Withdrawn, token1.decimals)),
+    Number(convertTokenToDecimal(amount1ForToken1, token1.decimals)),
     3
   )} ${token1.symbol})
 

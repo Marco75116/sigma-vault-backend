@@ -38,6 +38,9 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
       const sortedToken1 =
         token0.toLowerCase() < token1.toLowerCase() ? token1 : token0;
 
+      // Determine if tokens were swapped during sorting
+      const tokensSwapped = token0.toLowerCase() > token1.toLowerCase();
+
       sigmaVaultBalance = new SigmaVaultBalance({
         id: getSigmaVaultBalanceId(user, token0, token1),
         token0Id: getTokenId(sortedToken0),
@@ -49,8 +52,20 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
       });
     }
     sigmaVaultBalance.depositId = depositId;
-    sigmaVaultBalance.amount0 += amount0;
-    sigmaVaultBalance.amount1 += amount1;
+
+    // Determine if tokens were swapped during sorting for the existing balance
+    const tokensSwapped =
+      sigmaVaultBalance.token0Id.toLowerCase() !==
+      getTokenId(token0).toLowerCase();
+
+    // Add amounts based on whether tokens were swapped
+    if (tokensSwapped) {
+      sigmaVaultBalance.amount0 += amount1;
+      sigmaVaultBalance.amount1 += amount0;
+    } else {
+      sigmaVaultBalance.amount0 += amount0;
+      sigmaVaultBalance.amount1 += amount1;
+    }
 
     await mctx.store.upsert(sigmaVaultBalance);
 
@@ -77,7 +92,7 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
       amount1
     );
     console.log("TokensDeposited 1");
-    sendMessageToSigmaVaultChannel(message);
+    // sendMessageToSigmaVaultChannel(message);
   });
 };
 
@@ -93,8 +108,20 @@ export const handleTokensWithdrawn = async (mctx: MappingContext, log: Log) => {
     if (!sigmaVaultBalance) {
       return;
     }
-    sigmaVaultBalance.amount0 -= amount0;
-    sigmaVaultBalance.amount1 -= amount1;
+
+    // Determine if tokens were swapped during sorting for the existing balance
+    const tokensSwapped =
+      sigmaVaultBalance.token0Id.toLowerCase() !==
+      getTokenId(token0).toLowerCase();
+
+    // Subtract amounts based on whether tokens were swapped
+    if (tokensSwapped) {
+      sigmaVaultBalance.amount0 -= amount1;
+      sigmaVaultBalance.amount1 -= amount0;
+    } else {
+      sigmaVaultBalance.amount0 -= amount0;
+      sigmaVaultBalance.amount1 -= amount1;
+    }
 
     await mctx.store.upsert(sigmaVaultBalance);
 
@@ -114,6 +141,6 @@ export const handleTokensWithdrawn = async (mctx: MappingContext, log: Log) => {
       amount0,
       amount1
     );
-    sendMessageToSigmaVaultChannel(message);
+    // sendMessageToSigmaVaultChannel(message);
   });
 };
