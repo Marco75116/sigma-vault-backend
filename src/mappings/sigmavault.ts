@@ -20,6 +20,7 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
     sigmaVaultAbi.events.TokensDeposited.decode(log);
 
   mctx.queue.add(async () => {
+    console.log("TokensDeposited 0");
     let wallet = await mctx.store.get(Wallet, getWalletId(user));
     if (!wallet) {
       wallet = createWallet(user);
@@ -69,6 +70,7 @@ export const handleTokensDeposited = async (mctx: MappingContext, log: Log) => {
       amount1
     );
     if (mctx.isHead) {
+      console.log("TokensDeposited 1");
       sendMessageToSigmaVaultChannel(message);
     }
   });
